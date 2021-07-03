@@ -6,7 +6,7 @@ import qna.ForbiddenException;
 import qna.history.domain.DeleteHistory;
 import qna.question.domain.ContentType;
 import qna.question.domain.Question;
-import qna.user.User;
+import qna.user.domain.User;
 
 import javax.persistence.*;
 import java.util.Objects;

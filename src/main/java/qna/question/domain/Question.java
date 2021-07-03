@@ -3,7 +3,7 @@ package qna.question.domain;
 import qna.CannotDeleteException;
 import qna.ForbiddenException;
 import qna.BaseTimeEntity;
-import qna.user.User;
+import qna.user.domain.User;
 import qna.history.domain.DeleteHistory;
 
 import javax.persistence.*;

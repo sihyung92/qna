@@ -1,4 +1,4 @@
-package qna.user;
+package qna.user.domain;
 
 import qna.UnAuthorizedException;
 import qna.BaseTimeEntity;

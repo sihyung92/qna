@@ -9,9 +9,9 @@ import qna.question.answer.domain.Answer;
 import qna.question.answer.domain.AnswerRepository;
 import qna.question.domain.Question;
 import qna.question.domain.QuestionRepository;
-import qna.user.User;
+import qna.user.domain.User;
 import qna.user.UserFixture;
-import qna.user.UserRepository;
+import qna.user.domain.UserRepository;
 
 import java.util.List;
 

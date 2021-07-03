@@ -12,7 +12,7 @@ import qna.question.domain.QuestionRepository;
 import qna.question.answer.domain.Answer;
 import qna.question.answer.domain.AnswerRepository;
 import qna.history.domain.DeleteHistory;
-import qna.user.User;
+import qna.user.domain.User;
 
 import java.util.List;
 

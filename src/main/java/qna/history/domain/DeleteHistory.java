@@ -1,7 +1,7 @@
 package qna.history.domain;
 
 import qna.question.domain.ContentType;
-import qna.user.User;
+import qna.user.domain.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -4,9 +4,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import qna.CannotDeleteException;
 import qna.ForbiddenException;
-import qna.question.answer.domain.Answer;
 import qna.question.question.domain.QuestionTest;
-import qna.user.User;
+import qna.user.domain.User;
 import qna.user.UserFixture;
 
 import static org.assertj.core.api.Assertions.assertThat;

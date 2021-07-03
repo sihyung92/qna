@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import qna.CannotDeleteException;
-import qna.user.User;
-import qna.user.UserRepository;
+import qna.user.domain.User;
+import qna.user.domain.UserRepository;
 import qna.user.UserFixture;
 
 import static org.assertj.core.api.Assertions.assertThat;
