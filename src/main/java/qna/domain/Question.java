@@ -1,5 +1,8 @@
 package qna.domain;
 
+import qna.CannotDeleteException;
+import qna.ForbiddenException;
+
 import javax.persistence.*;
 
 @Entity
@@ -28,6 +31,24 @@ public class Question extends BaseEntity {
         this.title = title;
         this.contents = contents;
         this.writer = writer;
+    }
+
+    public void deleteBy(User loginUser) throws CannotDeleteException {
+        if (!isWriter(loginUser)) {
+            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
+        }
+        this.deleted = true;
+    }
+
+    public DeleteHistory deleteHistory() {
+        if (!this.deleted) {
+            throw new ForbiddenException("삭제되지 않은 자료입니다. 히스토리를 생성할 수 없습니다.");
+        }
+        return new DeleteHistory(ContentType.QUESTION, this.id, this.writer);
+    }
+
+    private boolean isWriter(User user) {
+        return this.writer.equals(user);
     }
 
     public Long getId() {

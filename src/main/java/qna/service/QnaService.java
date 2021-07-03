@@ -8,9 +8,9 @@ import qna.CannotDeleteException;
 import qna.NotFoundException;
 import qna.domain.*;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class QnaService {
@@ -26,6 +26,28 @@ public class QnaService {
         this.deleteHistoryService = deleteHistoryService;
     }
 
+    @Transactional
+    public void deleteQuestion(User loginUser, Long questionId) throws CannotDeleteException {
+        DeleteHistory questionDeleteHistory = deleteQuestionOnly(loginUser, questionId);
+
+        List<DeleteHistory> deleteHistories = deleteAnswer(loginUser, questionId);
+        deleteHistories.add(questionDeleteHistory);
+
+        deleteHistoryService.saveAll(deleteHistories);
+    }
+
+    @Transactional
+    public List<DeleteHistory> deleteAnswer(User loginUser, Long questionId) throws CannotDeleteException {
+        List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(questionId);
+        for (Answer answer : answers) {
+            answer.deleteBy(loginUser);
+        }
+
+        return answers.stream()
+                .map(Answer::deleteHistory)
+                .collect(toList());
+    }
+
     @Transactional(readOnly = true)
     public Question findQuestionById(Long id) {
         return questionRepository.findByIdAndDeletedFalse(id)
@@ -33,26 +55,11 @@ public class QnaService {
     }
 
     @Transactional
-    public void deleteQuestion(User loginUser, Long questionId) throws CannotDeleteException {
+    public DeleteHistory deleteQuestionOnly(User loginUser, Long questionId) throws CannotDeleteException {
         Question question = findQuestionById(questionId);
-        if (!question.getWriter().equals(loginUser)) {
-            throw new CannotDeleteException("질문을 삭제할 권한이 없습니다.");
-        }
-
-        List<Answer> answers = answerRepository.findByQuestionIdAndDeletedFalse(questionId);
-        for (Answer answer : answers) {
-            if (!answer.getUser().equals(loginUser)) {
-                throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
-            }
-        }
-
-        List<DeleteHistory> deleteHistories = new ArrayList<>();
-        question.setDeleted(true);
-        deleteHistories.add(new DeleteHistory(ContentType.QUESTION, questionId, question.getWriter(), LocalDateTime.now()));
-        for (Answer answer : answers) {
-            answer.setDeleted(true);
-            deleteHistories.add(new DeleteHistory(ContentType.ANSWER, answer.getId(), answer.getUser(), LocalDateTime.now()));
-        }
-        deleteHistoryService.saveAll(deleteHistories);
+        question.deleteBy(loginUser);
+        return question.deleteHistory();
     }
+
 }
+
