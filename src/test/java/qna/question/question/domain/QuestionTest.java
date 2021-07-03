@@ -1,9 +1,11 @@
-package qna.domain;
+package qna.question.question.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import qna.CannotDeleteException;
 import qna.ForbiddenException;
+import qna.user.UserFixture;
+import qna.question.domain.Question;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -17,8 +19,8 @@ public class QuestionTest {
     void deleteBy() throws CannotDeleteException {
         //given
         //when
-        Q1.deleteBy(UserTest.JAVAJIGI);
-        Q2.deleteBy(UserTest.SANJIGI);
+        Q1.deleteBy(UserFixture.createJAVAJIGI());
+        Q2.deleteBy(UserFixture.createSANJIGI());
 
         //then
         assertThat(Q1.isDeleted()).isTrue();
@@ -31,9 +33,9 @@ public class QuestionTest {
         //given
         //when
         //then
-        assertThatThrownBy(() -> Q1.deleteBy(UserTest.SANJIGI))
+        assertThatThrownBy(() -> Q1.deleteBy(UserFixture.createSANJIGI()))
                 .isInstanceOf(CannotDeleteException.class);
-        assertThatThrownBy(() -> Q2.deleteBy(UserTest.JAVAJIGI))
+        assertThatThrownBy(() -> Q2.deleteBy(UserFixture.createJAVAJIGI()))
                 .isInstanceOf(CannotDeleteException.class);
     }
 
@@ -51,11 +53,11 @@ public class QuestionTest {
 
     public static class QuestionFixture {
         public static Question createQ1() {
-            return new Question("title1", "contents1", UserTest.JAVAJIGI);
+            return new Question("title1", "contents1", UserFixture.createJAVAJIGI());
         }
 
         public static Question createQ2() {
-            return new Question("title2", "contents2", UserTest.SANJIGI);
+            return new Question("title2", "contents2", UserFixture.createSANJIGI());
         }
     }
 }

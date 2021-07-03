@@ -1,12 +1,18 @@
-package qna.domain;
+package qna.question.answer.domain;
 
+import qna.BaseTimeEntity;
 import qna.CannotDeleteException;
 import qna.ForbiddenException;
+import qna.history.domain.DeleteHistory;
+import qna.question.domain.ContentType;
+import qna.question.domain.Question;
+import qna.user.User;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
-public class Answer extends BaseEntity {
+public class Answer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +28,7 @@ public class Answer extends BaseEntity {
     public Answer() {
     }
 
-    public Answer(User writer, Question question, String contents) {
+    public Answer(Question question, User writer, String contents) {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
@@ -36,7 +42,7 @@ public class Answer extends BaseEntity {
     }
 
     public void deleteBy(User loginUser) throws CannotDeleteException {
-        if (!isWriter(loginUser)) {
+        if (!writer.equals(loginUser)) {
             throw new CannotDeleteException("다른 사람이 쓴 답변이 있어 삭제할 수 없습니다.");
         }
         this.deleted = true;
@@ -49,48 +55,33 @@ public class Answer extends BaseEntity {
         return new DeleteHistory(ContentType.ANSWER, this.id, writer);
     }
 
-    private boolean isWriter(User user) {
-        return this.writer.equals(user);
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
     }
 
     public Question getQuestion() {
         return question;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
+    public User getWriter() {
+        return writer;
     }
 
     public boolean isDeleted() {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Answer answer = (Answer) o;
+        return Objects.equals(id, answer.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override

@@ -1,4 +1,7 @@
-package qna.domain;
+package qna.history.domain;
+
+import qna.question.domain.ContentType;
+import qna.user.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,7 +18,7 @@ public class DeleteHistory {
     @ManyToOne
     @JoinColumn(name = "deleted_by_id")
     private User deleteUser;
-    private LocalDateTime createDate = LocalDateTime.now();
+    private LocalDateTime createDate;
 
     protected DeleteHistory() {
     }
@@ -24,6 +27,14 @@ public class DeleteHistory {
         this.contentType = contentType;
         this.contentId = contentId;
         this.deleteUser = deleteUser;
+        this.createDate = LocalDateTime.now();
+    }
+
+    public DeleteHistory(ContentType contentType, Long contentId, User deleteUser, LocalDateTime createDate) {
+        this.contentType = contentType;
+        this.contentId = contentId;
+        this.deleteUser = deleteUser;
+        this.createDate = createDate;
     }
 
     @Override

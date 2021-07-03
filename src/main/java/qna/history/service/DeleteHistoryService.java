@@ -1,10 +1,10 @@
-package qna.service;
+package qna.history.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import qna.domain.DeleteHistory;
-import qna.domain.DeleteHistoryRepository;
+import qna.history.domain.DeleteHistory;
+import qna.history.domain.DeleteHistoryRepository;
 
 import java.util.List;
 
