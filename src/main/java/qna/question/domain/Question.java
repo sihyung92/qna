@@ -15,7 +15,7 @@ public class Question extends BaseTimeEntity {
     private Long id;
     private String title;
     private String contents;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "writer_id")
     private User writer;
     private boolean deleted = false;
